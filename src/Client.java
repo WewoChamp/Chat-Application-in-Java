@@ -14,6 +14,9 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.userName = userName;
+            bufferedWriter.write(userName);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
         }catch (IOException e){
             shutdownClient(socket, bufferedReader, bufferedWriter);
         }
@@ -21,10 +24,6 @@ public class Client {
 
     public void sendMessage() {
         try{
-            bufferedWriter.write(userName);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-
             Scanner scanner = new Scanner(System.in);
             while(socket.isConnected()){
                 String messageToSend = scanner.nextLine();
@@ -70,13 +69,13 @@ public class Client {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter your username: ");
-        String userName = scanner.nextLine();
-        Socket socket = new Socket("localhost", 1111);
-        Client client = new Client(socket, userName);
-        client.listenForMessages();
-        client.sendMessage();
-    }
+//    public static void main(String[] args) throws IOException {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Please enter your username: ");
+//        String userName = scanner.nextLine();
+//        Socket socket = new Socket("localhost", 1111);
+//        Client client = new Client(socket, userName);
+//        client.listenForMessages();
+//        client.sendMessage();
+//    }
 }

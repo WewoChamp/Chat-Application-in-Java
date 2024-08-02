@@ -2,23 +2,22 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ConnectionHandler implements Runnable{
+public class ConnectionHandler2 implements Runnable{
     private Socket socket;
-    public static ArrayList<ConnectionHandler> connections = new ArrayList<>();
+    public static ArrayList<ConnectionHandler2> connections =
+            new ArrayList<>();
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     public String userName;
+    public String password;
 
-    public ConnectionHandler(Socket socket) {
+    public ConnectionHandler2(Socket socket) {
         try {
             this.socket = socket;
             this.bufferedReader =
                     new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter =
                     new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.userName = bufferedReader.readLine();
-            broadcastMessage(this.userName + " has joined the chat.");
-            connections.add(this);
         }catch (IOException e) {
             shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);
         }
@@ -26,21 +25,28 @@ public class ConnectionHandler implements Runnable{
 
     @Override
     public void run() {
-        String messageFromClient;
+        String userName = "";
+        String password;
+        boolean exists = true;
 
-        while(socket.isConnected()) {
-            try{
-                messageFromClient = bufferedReader.readLine();
-                broadcastMessage(messageFromClient);
-            }catch(IOException e){
-                shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);
+        try {
+            while (exists) {
+                userName = bufferedReader.readLine();
+                exists = doesUserExist(userName);
             }
-        }
 
+            password = bufferedReader.readLine();
+
+            addUser(userName, password);
+            connections.add(this);
+
+        } catch (Exception e) {
+
+        }
     }
 
     public void broadcastMessage(String messageToSend) {
-        for (ConnectionHandler connection : connections) {
+        for (ConnectionHandler2 connection : connections) {
             try{
                 if(!connection.userName.equals(userName)) {
                     connection.bufferedWriter.write(messageToSend);
@@ -74,4 +80,28 @@ public class ConnectionHandler implements Runnable{
             e.printStackTrace();
         }
     }
+
+    public boolean doesUserExist(String username){
+        boolean userExists = false;
+        for(ConnectionHandler2 connection : connections) {
+            if(connection.userName.equals(username)) {
+                userExists = true;
+                break;
+            }
+        }
+        try{
+            bufferedWriter.write(String.valueOf(userExists));
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return userExists;
+    }
+
+    public void addUser(String username, String password){
+        this.userName = username;
+        this.password = password;
+    }
 }
+

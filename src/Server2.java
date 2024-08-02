@@ -2,11 +2,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server2 {
     private ServerSocket serverSocket;
     private boolean serverRunning;
 
-    public Server(ServerSocket serverSocket) {
+    public Server2(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
         serverRunning = true;
     }
@@ -15,7 +15,7 @@ public class Server {
         try{
             while(serverRunning){
                 Socket socket = serverSocket.accept();
-                ConnectionHandler connection = new ConnectionHandler(socket);
+                ConnectionHandler2 connection = new ConnectionHandler2(socket);
 
                 Thread thread = new Thread(connection);
                 thread.start();
@@ -38,8 +38,9 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(1111);
-        Server server = new Server(serverSocket);
+        ServerSocket serverSocket = new ServerSocket(2222);
+        Server2 server = new Server2(serverSocket);
         server.startServer();
     }
 }
+
