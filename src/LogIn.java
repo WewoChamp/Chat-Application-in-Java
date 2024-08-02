@@ -20,7 +20,7 @@ public class LogIn {
         }catch(Exception e){
             e.printStackTrace();
         }
-        String userName;
+        String userName = "";
         String password;
         Scanner input = new Scanner(System.in);
 
@@ -45,30 +45,30 @@ public class LogIn {
         userName = input.nextLine();
         userName = userName.trim();
 
-        try{
+        try {
             bufferedWriter.write(userName);
             bufferedWriter.newLine();
             bufferedWriter.flush();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        while(!doesUserExist(userName) && !userName.equals("0")){
+        while (!doesUserExist(userName) && !userName.equals("0")) {
             System.out.println("USERNAME DOESN'T EXIST!");
             System.out.println("Please enter your username or 0 to go back: ");
             userName = input.nextLine();
             userName = userName.trim();
 
-            try{
+            try {
                 bufferedWriter.write(userName);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if(userName.equals("0")){
+        if (userName.equals("0")) {
             try {
                 new HomePage();
             } catch (IOException e) {
@@ -114,11 +114,7 @@ public class LogIn {
         }
 
         System.out.println("Welcome back!");
-//        try {
-//            new ChatPage();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        new ChatPage();
     }
 
     public boolean doesUserExist(String userName){

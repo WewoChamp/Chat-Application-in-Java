@@ -38,11 +38,10 @@ public class ConnectionHandler3 implements Runnable{
                 exists = doesUserExist(userName);
             }
 
-            while(!passwordMatch) {
+            while (!passwordMatch) {
                 password = bufferedReader.readLine();
                 passwordMatch = doesPasswordMatch(userName, password);
             }
-
         } catch (Exception e) {
 
         }

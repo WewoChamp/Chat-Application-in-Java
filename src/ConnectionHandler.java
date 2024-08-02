@@ -54,8 +54,8 @@ public class ConnectionHandler implements Runnable{
     }
 
     public void removeConnection(){
+        broadcastMessage(this.userName + " left the chat!");
         connections.remove(this);
-        broadcastMessage(userName + " left the chat!");
     }
 
     public void shutdownConnectionHandler(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
