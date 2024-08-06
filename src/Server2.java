@@ -19,7 +19,7 @@ public class Server2 {
 
                 Thread thread = new Thread(connection);
                 thread.start();
-                System.out.println(connection.userName + " connected");
+                //System.out.println(connection.userName + " connected");
             }
         }catch(Exception e){
             shutdownServer();

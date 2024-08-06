@@ -106,10 +106,5 @@ public class ConnectionHandler3 implements Runnable{
         }
         return passwordsMatch;
     }
-
-    public void addUser(String username, String password){
-        this.userName = username;
-        this.password = password;
-    }
 }
 

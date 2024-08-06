@@ -31,6 +31,10 @@ public class ConnectionHandler implements Runnable{
         while(socket.isConnected()) {
             try{
                 messageFromClient = bufferedReader.readLine();
+                if(messageFromClient.contains("/quit")) {
+                    shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);
+                    break;
+                }
                 broadcastMessage(messageFromClient);
             }catch(IOException e){
                 shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);

@@ -46,7 +46,7 @@ public class AccountCreation {
         }catch(Exception e){
             e.printStackTrace();
         }
-        while(doesUserExist(userName) && !userName.equals("0")){
+        while(doesUserExist() && !userName.equals("0")){
             System.out.println("USERNAME ALREADY EXISTS!");
             System.out.println("Please choose another username or enter 0 to " +
                     "go back: ");
@@ -124,7 +124,7 @@ public class AccountCreation {
         new ChatPage();
     }
 
-    public boolean doesUserExist(String userName){
+    public boolean doesUserExist(){
         boolean userExists = false;
         try {
             userExists = Boolean.parseBoolean(bufferedReader.readLine());

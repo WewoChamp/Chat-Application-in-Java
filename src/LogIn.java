@@ -53,7 +53,7 @@ public class LogIn {
             e.printStackTrace();
         }
 
-        while (!doesUserExist(userName) && !userName.equals("0")) {
+        while (!doesUserExist() && !userName.equals("0")) {
             System.out.println("USERNAME DOESN'T EXIST!");
             System.out.println("Please enter your username or 0 to go back: ");
             userName = input.nextLine();
@@ -90,7 +90,7 @@ public class LogIn {
             e.printStackTrace();
         }
 
-        while(!doesPasswordMatch(userName, password) && !password.equals("0")){
+        while(!doesPasswordMatch() && !password.equals("0")){
             System.out.println("INCORRECT PASSWORD!");
             System.out.println("Please enter your password or 0 to go back: ");
             password = input.nextLine();
@@ -117,7 +117,7 @@ public class LogIn {
         new ChatPage();
     }
 
-    public boolean doesUserExist(String userName){
+    public boolean doesUserExist(){
         boolean userExists = false;
         try {
             userExists = Boolean.parseBoolean(bufferedReader.readLine());
@@ -127,7 +127,7 @@ public class LogIn {
         return userExists;
     }
 
-    public boolean doesPasswordMatch(String userName, String password){
+    public boolean doesPasswordMatch(){
         boolean passwordMatch = false;
         try{
             passwordMatch = Boolean.parseBoolean(bufferedReader.readLine());

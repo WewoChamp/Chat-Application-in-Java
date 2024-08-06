@@ -45,23 +45,8 @@ public class ConnectionHandler2 implements Runnable{
         }
     }
 
-    public void broadcastMessage(String messageToSend) {
-        for (ConnectionHandler2 connection : connections) {
-            try{
-                if(!connection.userName.equals(userName)) {
-                    connection.bufferedWriter.write(messageToSend);
-                    connection.bufferedWriter.newLine();
-                    connection.bufferedWriter.flush();
-                }
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void removeConnection(){
         connections.remove(this);
-        broadcastMessage(userName + " left the chat!");
     }
 
     public void shutdownConnectionHandler(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {

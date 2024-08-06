@@ -30,6 +30,10 @@ public class Client {
                 bufferedWriter.write(userName + ": " + messageToSend);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
+                if(messageToSend.contains("/quit")){
+                    shutdownClient(socket, bufferedReader, bufferedWriter);
+                    new HomePage();
+                }
             }
         }catch(IOException e){
             shutdownClient(socket, bufferedReader, bufferedWriter);
@@ -44,7 +48,9 @@ public class Client {
                 while(socket.isConnected()){
                     try {
                         messageFromChat = bufferedReader.readLine();
-                        System.out.println(messageFromChat);
+                        if(messageFromChat != null) {
+                            System.out.println(messageFromChat);
+                        }
                     }catch(IOException e){
                         shutdownClient(socket, bufferedReader, bufferedWriter);
                     }

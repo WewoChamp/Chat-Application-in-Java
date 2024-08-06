@@ -15,6 +15,9 @@ public class ChatPage {
         System.out.println("Type texts and press enter to send");
         System.out.println(
                 "**************************************************");
+        System.out.println("Enter \"quit\" to leave the chat");
+        System.out.println(
+                "**************************************************");
         if(AccountCreation.userName != null) {
             try {
                 Socket socket = new Socket("localhost", 1111);
