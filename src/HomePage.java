@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class HomePage {
     public static boolean wasCreation = false;
     public HomePage() throws IOException {
-//        Socket socket = new Socket("localhost", 1111);
         Socket socket2 = new Socket("localhost", 2222);
         Socket socket3 = new Socket("localhost", 3333);
         String choice;

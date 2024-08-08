@@ -6,17 +6,23 @@ public class LogIn {
     public static String userName;
     public static boolean wasCreated = false;
     private Socket socket;
+    private Socket socket2;
     private BufferedReader bufferedReader;
+    private BufferedReader bufferedReader2;
     private BufferedWriter bufferedWriter;
+    private BufferedWriter bufferedWriter2;
 
     public LogIn(Socket socket) {
         LogIn.wasCreated = true;
         try{
             this.socket = socket;
+            this.socket2 = new Socket("localhost", 4444);
             this.bufferedReader =
                     new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.bufferedReader2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
             this.bufferedWriter =
                     new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.bufferedWriter2 = new BufferedWriter(new OutputStreamWriter(socket2.getOutputStream()));
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -24,7 +30,7 @@ public class LogIn {
         String password;
         Scanner input = new Scanner(System.in);
 
-        //try block below in place to satisfy the buffer stream
+        //try block below in place to satisfy the various buffer streams
         try{
             bufferedWriter.write("dssdcaucfudscydcv");
             bufferedWriter.newLine();
@@ -32,6 +38,9 @@ public class LogIn {
             bufferedWriter.write("cahscgdycdydyu");
             bufferedWriter.newLine();
             bufferedWriter.flush();
+            bufferedWriter2.write("dssdcaucfudscydcv");
+            bufferedWriter2.newLine();
+            bufferedWriter2.flush();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -53,6 +62,14 @@ public class LogIn {
             e.printStackTrace();
         }
 
+        try {
+            bufferedWriter2.write(userName);
+            bufferedWriter2.newLine();
+            bufferedWriter2.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         while (!doesUserExist() && !userName.equals("0")) {
             System.out.println("USERNAME DOESN'T EXIST!");
             System.out.println("Please enter your username or 0 to go back: ");
@@ -66,6 +83,29 @@ public class LogIn {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        while(isLoggedIn() && !userName.equals("0")){
+            System.out.println("USER ALREADY LOGGED IN!");
+            System.out.println("Please enter your username or 0 to go back: ");
+            userName = input.nextLine();
+            userName = userName.trim();
+
+            try {
+                bufferedWriter2.write(userName);
+                bufferedWriter2.newLine();
+                bufferedWriter2.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            bufferedWriter2.write(String.valueOf(true));
+            bufferedWriter2.newLine();
+            bufferedWriter2.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (userName.equals("0")) {
@@ -125,6 +165,16 @@ public class LogIn {
             e.printStackTrace();
         }
         return userExists;
+    }
+
+    public boolean isLoggedIn(){
+        boolean loggedIn = false;
+        try{
+            loggedIn = Boolean.parseBoolean(bufferedReader2.readLine());
+        }catch (IOException e){
+
+        }
+        return loggedIn;
     }
 
     public boolean doesPasswordMatch(){

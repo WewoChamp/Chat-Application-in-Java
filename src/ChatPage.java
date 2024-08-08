@@ -21,7 +21,9 @@ public class ChatPage {
         if(AccountCreation.userName != null) {
             try {
                 Socket socket = new Socket("localhost", 1111);
-                Client client = new Client(socket, AccountCreation.userName);
+                Socket socket2 = new Socket("localhost", 4444);
+                Client client = new Client(socket,
+                        socket2, AccountCreation.userName);
                 client.listenForMessages();
                 client.sendMessage();
             } catch (IOException e) {
@@ -30,7 +32,8 @@ public class ChatPage {
         }else{
             try {
                 Socket socket = new Socket("localhost", 1111);
-                Client client = new Client(socket, LogIn.userName);
+                Socket socket2 = new Socket("localhost", 4444);
+                Client client = new Client(socket, socket2, LogIn.userName);
                 client.listenForMessages();
                 client.sendMessage();
             } catch (IOException e) {

@@ -2,14 +2,15 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ConnectionHandler implements Runnable{
+public class ConnectionHandler4 implements Runnable{
     private Socket socket;
-    public static ArrayList<ConnectionHandler> connections = new ArrayList<>();
+    public static ArrayList<ConnectionHandler4> connections =
+            new ArrayList<>();
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     public String userName;
 
-    public ConnectionHandler(Socket socket) {
+    public ConnectionHandler4(Socket socket) {
         try {
             this.socket = socket;
             this.bufferedReader =
@@ -17,7 +18,6 @@ public class ConnectionHandler implements Runnable{
             this.bufferedWriter =
                     new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.userName = bufferedReader.readLine();
-            broadcastMessage(this.userName + " has joined the chat.");
             connections.add(this);
         }catch (IOException e) {
             shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);
@@ -26,39 +26,28 @@ public class ConnectionHandler implements Runnable{
 
     @Override
     public void run() {
-        String messageFromClient;
-
-        while(socket.isConnected()) {
-            try{
-                messageFromClient = bufferedReader.readLine();
-                if(messageFromClient.contains("/quit")) {
-                    shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);
-                    break;
-                }
-                broadcastMessage(messageFromClient);
-            }catch(IOException e){
-                shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);
+        String userName = "";
+        boolean loggedIn = true;
+        while (loggedIn) {
+            try {
+                userName = bufferedReader.readLine();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+            loggedIn = isLoggedIn(userName);
+        }
+        try {
+            loggedIn = Boolean.parseBoolean(bufferedReader.readLine());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
-    }
-
-    public void broadcastMessage(String messageToSend) {
-        for (ConnectionHandler connection : connections) {
-            try{
-                if(!connection.userName.equals(userName)) {
-                    connection.bufferedWriter.write(messageToSend);
-                    connection.bufferedWriter.newLine();
-                    connection.bufferedWriter.flush();
-                }
-            }catch(IOException e){
-                e.printStackTrace();
-            }
+        if (!loggedIn) {
+            shutdownConnectionHandler(socket, bufferedReader, bufferedWriter);
         }
     }
 
     public void removeConnection(){
-        broadcastMessage(this.userName + " left the chat!");
         connections.remove(this);
     }
 
@@ -79,4 +68,23 @@ public class ConnectionHandler implements Runnable{
         }
     }
 
+    public boolean isLoggedIn(String userName){
+        boolean loggedIn = false;
+        for (ConnectionHandler4 connection : connections) {
+            if(connection.userName.equals(userName)) {
+                loggedIn = true;
+                break;
+            }
+        }
+        try{
+            bufferedWriter.write(String.valueOf(loggedIn));
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return loggedIn;
+    }
 }
+
+
